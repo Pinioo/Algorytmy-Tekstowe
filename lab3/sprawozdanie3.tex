@@ -1,0 +1,74 @@
+\documentclass{article}
+
+\usepackage{multirow}
+
+\title{
+	Algorytmy tekstowe\\
+	\large laboratorium 3 - kompresja tekstu\\Algorytmy statycznego i dynamicznego kodowania Huffmana
+}
+\author{Jakub Pinowski}
+\date{}
+
+\begin{document}
+\maketitle
+\section{Format plików wyjściowych}
+	\subsection{Statyczne kodowanie Huffmana}
+		Plik rozpoczyna się danymi potrzebnymi do odkodowania i poprawnego przeczytania tekstu:
+		\begin{itemize}
+		\item 8 bitów na ilość kodów (\(N\)) jakie znajdziemy w tekście
+		\item 8 bitów na ilość bitów na ilu zapisany jest najdłuższy kod (\(L_{MAX}\))
+		\item 3 bity na ilość bitów, które musimy "uciąć" z końca tekstu, a zostały dopiane ze względu na bajtową reprezentację pliku na dysku
+		\item \(N\) razy fragment w postaci \textit{8 bitów na kod ASCII + \(\left \lceil{log_2(L_{MAX})}\right \rceil\) bitów na długość kodu L + L bitów na kod Huffmana}
+		\end{itemize}
+		Kolejne bity zawierają zakodowaną treść
+	\subsection{Dynamiczne kodowanie Huffmana}
+		Plik składa się wyłącznie z kodów ASCII i kodów z drzewa Huffmana. Przeglądanie pliku polega na sprawdzaniu kolejnych znalezionych kodów i aktualizowaniu drzewa oraz dodawaniu liter do tekstu 
+		\begin{itemize}
+		\item 3 bity na ilość bitów, które musimy "uciąć" z końca tekstu, a zostały dopiane ze względu na bajtową reprezentację pliku na dysku
+		\item Na początku znajduje się 8 bitów na kod ASCII pierwszej litery tekstu
+		\item Jeżeli znaleziony kod jest kodem znaku specjalnego, kolejne 8 bitów jest kodem ASCII litery, która wcześniej nie wystąpiła
+		\end{itemize}
+\section{Porównanie czasów działania}
+
+	\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	\multirow{2}{*}{Nazwa} & \multirow{2}{*}{Rozmiar} & \multicolumn{2}{|c|}{Statyczny} & \multicolumn{2}{|c|}{Dynamiczny}\\
+	\cline{3-6}
+	& & Kompresja & Dekompresja & Kompresja & Dekompresja\\
+	\hline
+	test1.txt & 1.03 kB & 0.003s & 0.001s & 0.017s & 0.007s\\
+	\hline
+	test2.txt & 10.27 kB & 0.002s & 0.007s & 0.061s & 0.051s\\
+	\hline
+	test3.txt & 100.48 kB & 0.018s & 0.069s & 0.584s & 0.498s\\
+	\hline
+	testHp.txt & 863.36 kB & 0.149s & 0.561s & 5.268s & 4.390s\\
+	\hline
+	\end{tabular}
+	\end{center}
+	Algorytm dynamicznego kodowania mocno traci w przypadku większych plików, jest to spowodowane potrzebą aktualizacji drzewa po każdej literze, co wymaga znalezienia węzła w drzewie z którym mógłby zamienić się węzeł aktualizowany. Dla dużego drzewa może to wymagać sporej ilości czasu. \\[3mm]
+	Przy okazji mierzenia czasów, program sprawdza zgodność odkodowanego tekstu z zawartością oryginalnego pliku.
+\section{Stopień kompresji tekstu}
+	Plik test1.txt 1.03 kB
+	\begin{itemize}
+	\item Static 39.2\%
+	\item Adaptive 43.1\%
+	\end{itemize}
+	Plik test2.txt 10.27 kB
+	\begin{itemize}
+	\item Static 45.7\%
+	\item Adaptive 46.1\%
+	\end{itemize}
+	Plik test3.txt 100.48 kB
+	\begin{itemize}
+	\item Static 46.4\%
+	\item Adaptive 46.4\%
+	\end{itemize}
+	Plik testHp.txt 863.36 kB
+	\begin{itemize}
+	\item Static 42.7\%
+	\item Adaptive 42.7\%
+	\end{itemize}
+	Widzimy że niezależnie od wariantu kodowania Huffmana i wielkości pliku, stopień kompresji jest dość podobny i oscyluje około wartości 40-45\%. Czym większy plik, tym bliższe sobie są stopnie kompresji.
+\end{document}

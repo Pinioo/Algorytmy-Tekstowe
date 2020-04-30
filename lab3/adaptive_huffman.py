@@ -1,5 +1,5 @@
 from bitarray_utils import *
-import draw
+from draw_huff import draw_huff
 import os
 from collections import defaultdict
 
@@ -120,7 +120,7 @@ def encode(text,draw_tree=False):
             updated_node.increment()
 
     if draw_tree:
-        draw.draw_huff(root)
+        draw_huff(root)
     return encoded
 
 

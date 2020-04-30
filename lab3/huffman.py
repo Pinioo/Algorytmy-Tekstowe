@@ -1,5 +1,5 @@
 import heapq
-import draw
+from draw_huff import draw_huff
 from bitarray_utils import *
 import os
 
@@ -72,7 +72,7 @@ def encode(text, draw_tree = False):
         tree_set.add(new_node)
     root = tree_set.pop()
     if draw_tree:
-        draw.draw_huff(root)
+        draw_huff(root)
 
     encoded = bitarray('')
     codes = static_huff_codes(root)

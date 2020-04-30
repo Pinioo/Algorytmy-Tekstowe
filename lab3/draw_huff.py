@@ -7,9 +7,9 @@ def dfs(node, G, index = 0):
         node.index = index
         if node.parent is not None:
             if node.letter is not None:
-                G.add_edge(node.parent.index, index, L=f"{node.letter}")
+                G.add_edge(node.parent.index, index, L=f"{node.letter}: {node.code().to01()}")
             else:
-                G.add_edge(node.parent.index, index, L='##')
+                G.add_edge(node.parent.index, index, L='')
         index += 1
         for v in [node.left, node.right]:
             index = dfs(v, G, index)
